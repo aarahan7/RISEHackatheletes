@@ -28,23 +28,28 @@ export class LandingComponent implements OnInit{
    		
    		this.getUserCardDetails();	   			
    		
-  	});
+  	};
   	
   	validateCredentials(): boolean {
   		//TODO
   		return true;
-  	});
+  	};
   	
   	getUserCardDetails(){
   		 this._cardService.getCardsDetails()
                      .subscribe(
                        cards => this.cards = cards,
                        error =>  this.errorMessage = <any>error);
-  	});
+  	};
 
     logout(): void {
         this._router.navigate(['Welcome']);
-    }
+    };
+    updatedata(data: string):void{
+
+		this.userName = data;
+
+	}
 
     
 }
