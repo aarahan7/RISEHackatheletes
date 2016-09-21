@@ -18,7 +18,7 @@ app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-    next();
+next();
 });
 app.use('/api',router);
 
@@ -29,6 +29,15 @@ console.log("req "+req.body.username);
      cobracndLogin(req.body.username,req.body.password,res);
 
     });
+router.route('/accounts')
+    .post(function (req,res) {
+        console.log("req "+req.body.usertoken);
+        accountDetails(req.body.usertoken,req.body.cobrandtoken,res);
+
+    });
+
+
+
 
 app.get('/',function (req,res) {
     res.send("hi all0");
@@ -57,9 +66,9 @@ function cobracndLogin(username,password,resp)
             globalApp.properties.options,
 
             function (error, response, body) {
-                //console.log("form"+JSON.stringify(response));
+
                 if (error) {
-                    resp.json({ "success" : "false"});
+                    resp.json({ "success" : "false","cobrandSession":"","userSession":""});
                     return console.log('Error in Cobrand login: ', error);
                     console.log("error");
 
@@ -91,13 +100,17 @@ function cobracndLogin(username,password,resp)
                     {console.log(username);
                         globalApp.properties.options.json = configApp.properties.userParam4;
                     }
+					else
+					{
+						resp.json({ "success" : "false","cobrandSession":"","userSession":""});
+					}
                     //Invoking user login API
                     request(
                         globalApp.properties.options,
                         function (error, response, body) {
 
                             if (error) {
-                                resp.json({ "success" : "false"});
+                                resp.json({ "success" : "false","cobrandSession":"","userSession":""});
                                 return console.log('Error in User login: ',
                                     error);
 
@@ -108,7 +121,7 @@ function cobracndLogin(username,password,resp)
                                 console.log(username);
                                 globalApp.properties.userSessionToken = body.user.session.userSession;
 
-                                resp.json({ "success" : "true"});
+                                resp.json({ "success" : "true","cobrandSession":globalApp.properties.cobSessionToken,"userSession":globalApp.properties.userSessionToken});
                             }
 
                         })
@@ -116,7 +129,37 @@ function cobracndLogin(username,password,resp)
             })
 
 
+}
 
+function accountDetails(usertoken,cobrandtoken,resp){
+    //Setting the input parameters for Account API Call
+    globalApp.properties.options.url = configApp.properties.baseURL + globalApp.properties.accountURL;
+    globalApp.properties.options.method = globalApp.properties.get;
+    globalApp.properties.options.headers.Authorization = 'userSession='+usertoken+', cobSession='+cobrandtoken;
+    //Invoking the Account API Call
 
+    request(globalApp.properties.options,  function  (error,  response,  body)  {
 
+        console.log("error "+error);
+        console.log("response "+response);
+        console.log("body "+body);
+        if (error) {
+            resp.json({ "success" : "false","accounts":""});
+            return console.log('Error in Cobrand login: ', error);
+            console.log("error");
+
+        }
+
+                if  (!error  &&  response.statusCode  ==  200) {
+                  //  var gson = JSON.parse(body);
+                    console.log(body);
+                   // for (var i = 0; i < gson.account.length; i++) {
+                   //     console.log(gson.account[i].id + ' - ' + gson.account[i].CONTAINER + ' - ' + gson.account[i].accountName + ' - ' + (gson.account[i].balance !== undefined ? gson.account[i].balance.amount : '0'));
+                   // }
+                    resp.json(response);
+                }
+
+        resp.json(response);
+
+    })
 }

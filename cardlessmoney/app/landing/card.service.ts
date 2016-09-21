@@ -21,6 +21,7 @@ export class CardService {
     constructor(private _http: Http) { }
     
     authenticateUser(userName: string, password: string): Observable<boolean>{
+
     
     	console.log(userName);
 
@@ -30,9 +31,7 @@ export class CardService {
 
 		headers.append('Content-Type', 'application/json');
 
-
-
-    	 return this._http.post('http://localhost:2000/api/login',JSON.stringify({"username":userName,"password":password}),{headers: headers})
+    	 return this._http.post('http://e641cf55.ngrok.io/api/login',JSON.stringify({"username":userName,"password":password}),{headers: headers})
             .map((response: Response) => <any> response.json())
             //.do(data => console.log('All: ' +  JSON.stringify(data)))
             .catch(this.handleError);
@@ -41,10 +40,10 @@ export class CardService {
        getCardsDetails(): Observable<any[]> {
        
        let headers = new Headers();
-       headers.append('Access-Control-Allow-Origin', '*');
+
+		   headers.append('Content-Type', 'application/json');
        
-       
-        return this._http.get('api/cards/cards.json', {headers: headers})
+        return this._http.post('http://e641cf55.ngrok.io/api/accounts',JSON.stringify({"usertoken":sessionStorage.getItem("userSession"),"cobrandtoken":sessionStorage.getItem("cobrandSession")}) ,{headers: headers})
             .map((response: Response) => <ICard[]> response.json())
             .do(data => console.log('All: ' +  JSON.stringify(data)))
             .catch(this.handleError);

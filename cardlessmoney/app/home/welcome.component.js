@@ -31,6 +31,10 @@ System.register(['angular2/core', 'angular2/router', '../landing/card.service'],
                     this._cardService = _cardService;
                     this.pageTitle = 'Cardless Money';
                 }
+                WelcomeComponent.prototype.ngOnInit = function () {
+                    sessionStorage.clear();
+                };
+                ;
                 WelcomeComponent.prototype.authenticate = function () {
                     var _this = this;
                     this.errorMessage = "";
@@ -38,6 +42,8 @@ System.register(['angular2/core', 'angular2/router', '../landing/card.service'],
                         .subscribe(function (isUserAuthenticated) { return _this.isUserAuthenticated = isUserAuthenticated; }, function (error) { return _this.errorMessage = error; });
                     console.log(this.isUserAuthenticated);
                     if (this.isUserAuthenticated.success === 'true') {
+                        sessionStorage.setItem('cobrandSession', this.isUserAuthenticated.cobrandSession);
+                        sessionStorage.setItem('userSession', this.isUserAuthenticated.userSession);
                         this.router.parent.navigateByUrl('/landing?userName=' + this.userName);
                     }
                     else {
