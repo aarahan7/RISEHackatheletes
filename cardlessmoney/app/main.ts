@@ -3,5 +3,7 @@ import { ROUTER_PROVIDERS } from 'angular2/router';
 
 // Our main component
 import { AppComponent } from './app.component';
+import {enableProdMode} from 'angular2/core';
 
+enableProdMode();
 bootstrap(AppComponent, [ROUTER_PROVIDERS]);

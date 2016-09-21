@@ -26,7 +26,7 @@ export class WelcomeComponent {
                      .subscribe(
                        isUserAuthenticated => this.isUserAuthenticated = isUserAuthenticated,
                        error =>  this.errorMessage = <any>error);
-  	
+  	console.log(this.isUserAuthenticated);
   	if(this.isUserAuthenticated.success === 'true'){
        this.router.parent.navigateByUrl('/landing?userName='+this.userName);
   	}else{

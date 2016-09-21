@@ -1,6 +1,8 @@
 import { Injectable } from 'angular2/core';
+
 import { Http, Response, Headers } from 'angular2/http';
 import { Observable } from 'rxjs/Observable';
+
 
 import { ICard } from './card';
 
@@ -14,18 +16,25 @@ export class CardService {
 //001, abc123
 
 	userid: string;
+
 	
     constructor(private _http: Http) { }
     
     authenticateUser(userName: string, password: string): Observable<boolean>{
     
-    	//let body = JSON.stringify({ userName, password });
-    	
-    	this._login = 'http://d152e8d0.ngrok.io/riseapi2016/login?userid='+userName+'&password='+password;
-    
-    	 return this._http.get('api/cards/login.json')
+    	console.log(userName);
+
+    	//this._login = 'http://d152e8d0.ngrok.io/riseapi2016/login?userid='+userName+'&password='+password;
+
+		let headers = new Headers();
+
+		headers.append('Content-Type', 'application/json');
+
+
+
+    	 return this._http.post('http://localhost:2000/api/login',JSON.stringify({"username":userName,"password":password}),{headers: headers})
             .map((response: Response) => <any> response.json())
-            .do(data => console.log('All: ' +  JSON.stringify(data)))
+            //.do(data => console.log('All: ' +  JSON.stringify(data)))
             .catch(this.handleError);
     }
     
@@ -35,7 +44,7 @@ export class CardService {
        headers.append('Access-Control-Allow-Origin', '*');
        
        
-        return this._http.get('api/cards/cards.json', headers: headers)
+        return this._http.get('api/cards/cards.json', {headers: headers})
             .map((response: Response) => <ICard[]> response.json())
             .do(data => console.log('All: ' +  JSON.stringify(data)))
             .catch(this.handleError);

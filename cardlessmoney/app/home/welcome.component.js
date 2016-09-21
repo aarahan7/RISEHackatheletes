@@ -36,6 +36,7 @@ System.register(['angular2/core', 'angular2/router', '../landing/card.service'],
                     this.errorMessage = "";
                     this._cardService.authenticateUser(this.userName, this.password)
                         .subscribe(function (isUserAuthenticated) { return _this.isUserAuthenticated = isUserAuthenticated; }, function (error) { return _this.errorMessage = error; });
+                    console.log(this.isUserAuthenticated);
                     if (this.isUserAuthenticated.success === 'true') {
                         this.router.parent.navigateByUrl('/landing?userName=' + this.userName);
                     }

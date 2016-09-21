@@ -32,17 +32,18 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable'], function(
                     this._login = 'http://d152e8d0.ngrok.io/riseapi2016/login';
                 }
                 CardService.prototype.authenticateUser = function (userName, password) {
-                    //let body = JSON.stringify({ userName, password });
-                    this._login = 'http://d152e8d0.ngrok.io/riseapi2016/login?userid=' + userName + '&password=' + password;
-                    return this._http.get('api/cards/login.json')
+                    console.log(userName);
+                    //this._login = 'http://d152e8d0.ngrok.io/riseapi2016/login?userid='+userName+'&password='+password;
+                    var headers = new http_1.Headers();
+                    headers.append('Content-Type', 'application/json');
+                    return this._http.post('http://localhost:2000/api/login', JSON.stringify({ "username": userName, "password": password }), { headers: headers })
                         .map(function (response) { return response.json(); })
-                        .do(function (data) { return console.log('All: ' + JSON.stringify(data)); })
                         .catch(this.handleError);
                 };
                 CardService.prototype.getCardsDetails = function () {
                     var headers = new http_1.Headers();
                     headers.append('Access-Control-Allow-Origin', '*');
-                    return this._http.get('api/cards/cards.json', headers, headers)
+                    return this._http.get('api/cards/cards.json', { headers: headers })
                         .map(function (response) { return response.json(); })
                         .do(function (data) { return console.log('All: ' + JSON.stringify(data)); })
                         .catch(this.handleError);

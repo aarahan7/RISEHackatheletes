@@ -52,9 +52,6 @@ System.register(['angular2/core', 'angular2/router', './card.service'], function
                     this._router.navigate(['Welcome']);
                 };
                 ;
-                LandingComponent.prototype.updatedata = function (data) {
-                    this.userName = data;
-                };
                 LandingComponent = __decorate([
                     core_1.Component({
                         templateUrl: 'app/landing/landing.component.html',

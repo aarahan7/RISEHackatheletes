@@ -45,11 +45,8 @@ export class LandingComponent implements OnInit{
     logout(): void {
         this._router.navigate(['Welcome']);
     };
-    updatedata(data: string):void{
+	
 
-		this.userName = data;
-
-	}
 
     
 }
