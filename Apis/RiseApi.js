@@ -20,13 +20,13 @@ app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
     next();
 });
-app.use('/api',router);
+app.use('/riseapi',router);
 
 
-router.route('/login')
+router.route('/userlogin')
     .post(function (req,res) {
 console.log("req "+req.body.username);
-     cobracndLogin(req.body.username,req.body.password,res);
+     userLogin(req.body.username,req.body.password,res);
 
     });
 
@@ -39,7 +39,7 @@ app.listen(2000,function () {
 });
 
 
-function cobracndLogin(username,password,resp)
+function userLogin(username,password,resp)
 {
 
     globalApp.properties.options.url = configApp.properties.baseURL
@@ -49,9 +49,6 @@ function cobracndLogin(username,password,resp)
     globalApp.properties.options.method = globalApp.properties.post;
     globalApp.properties.options.headers = globalApp.properties.headers;
     globalApp.properties.options.json = configApp.properties.cobrandParam;
-
-
-
 
         request(
             globalApp.properties.options,
@@ -90,6 +87,10 @@ function cobracndLogin(username,password,resp)
                     else if(username=="kishore" && password=="kishore")
                     {console.log(username);
                         globalApp.properties.options.json = configApp.properties.userParam4;
+                    }
+                    else
+                    {
+                        resp.json({ "success" : "false"});
                     }
                     //Invoking user login API
                     request(
