@@ -20,13 +20,13 @@ app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
 next();
 });
-app.use('/riseapi',router);
+app.use('/api',router);
 
 
-router.route('/userlogin')
+router.route('/login')
     .post(function (req,res) {
 console.log("req "+req.body.username);
-     userLogin(req.body.username,req.body.password,res);
+     cobracndLogin(req.body.username,req.body.password,res);
 
     });
 router.route('/accounts')
@@ -48,7 +48,7 @@ app.listen(2000,function () {
 });
 
 
-function userLogin(username,password,resp)
+function cobracndLogin(username,password,resp)
 {
 
     globalApp.properties.options.url = configApp.properties.baseURL
@@ -58,6 +58,9 @@ function userLogin(username,password,resp)
     globalApp.properties.options.method = globalApp.properties.post;
     globalApp.properties.options.headers = globalApp.properties.headers;
     globalApp.properties.options.json = configApp.properties.cobrandParam;
+
+
+
 
         request(
             globalApp.properties.options,
@@ -97,17 +100,10 @@ function userLogin(username,password,resp)
                     {console.log(username);
                         globalApp.properties.options.json = configApp.properties.userParam4;
                     }
-<<<<<<< HEAD
 					else
 					{
 						resp.json({ "success" : "false","cobrandSession":"","userSession":""});
 					}
-=======
-                    else
-                    {
-                        resp.json({ "success" : "false"});
-                    }
->>>>>>> a47570fd4fa909b52bf9bd616a9a2765ef1441ba
                     //Invoking user login API
                     request(
                         globalApp.properties.options,
@@ -160,7 +156,7 @@ function accountDetails(usertoken,cobrandtoken,resp){
                    // for (var i = 0; i < gson.account.length; i++) {
                    //     console.log(gson.account[i].id + ' - ' + gson.account[i].CONTAINER + ' - ' + gson.account[i].accountName + ' - ' + (gson.account[i].balance !== undefined ? gson.account[i].balance.amount : '0'));
                    // }
-                    resp.json(response);
+                    resp.json(response.body);
                 }
 
         resp.json(response);
